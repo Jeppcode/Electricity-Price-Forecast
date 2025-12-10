@@ -1,0 +1,313 @@
+Elpris API
+Vill du också leka med elpriset?
+Använd vårt helt öppna och gratis API för att hämta dagens och morgondagens svenska elpriser. Fritt tillgänglig för vem som helst, för vad som helst. För vi tror att elpriset tillhör folket och ska vara fritt tillgängligt för alla.
+
+Inga jippon eller tjusiga grejer, bara elpriserna levererade som en statisk json-fil:
+
+GET https://www.elprisetjustnu.se/api/v1/prices/[ÅR]/[MÅNAD]-[DAG]_[PRISKLASS].json
+Variabel	Beskrivning	Exempel
+ÅR	Alla fyra siffror	2025
+MÅNAD	Alltid två siffror, med en inledande nolla	12
+DAG	Alltid två siffror, med en inledande nolla	05
+PRISKLASS	SE1 = Luleå / Norra Sverige
+SE2 = Sundsvall / Norra Mellansverige
+SE3 = Stockholm / Södra Mellansverige
+SE4 = Malmö / Södra Sverige	SE3
+Exempel: Dagens elpriser i Stockholm:
+
+GET https://www.elprisetjustnu.se/api/v1/prices/2025/12-05_SE3.json
+Då får du gärna referera till oss som källa, om du ska använda dem offentligt någonstans och är girig:
+
+Elpriser tillhandahålls av Elpriset just nu.se
+
+Koda:
+
+<p><a href="https://www.elprisetjustnu.se"><img src="https://i.bnfcl.io/hva-koster-strommen/elpriser-tillhandahalls-av-elprisetjustnu_ttNExOIU_.png" alt="Elpriser tillhandahålls av Elpriset just nu.se" width="200" height="45"></a></p>
+Eller bara som text:
+
+Elpriser tillhandahålls av Elpriset just nu.se
+
+<p>Elpriser tillhandahålls av <a href="https://www.elprisetjustnu.se">Elpriset just nu.se</a></p>
+Kvartspriser från 1 oktober 2025
+Sverige går från elpris per timme till per kvart från och med 1 oktober 2025. Då kommer vårt API också att visa priser per kvart.
+
+Datastrukturen kommer fortfarande att vara densamma, men det kommer då att finnas 96 priser under ett dygn istället för 24.
+
+För tidigare datum kommer det endast att finnas priser per timme.
+
+Önskar du fortfarande elpris per timme, eller bara ett mer kompakt format?
+Kolla in Elpris Proxy API (api.elpris.eu).
+
+Embed framsidan
+Framsidan kan också bäddas in, till exempel på en stor skärm, infoskärm eller annan webbplats. Bara lägg till ?mode=embed i webbadressen, då är alla knappar dolda för en snyggare presentationsvy.
+
+Om du inte vill inkludera rubriken med titel kan du lägga till den &layout=no-header i slutet av webbadressen. &layout=minimal tar också bort menyn för val av prisklass.
+
+Du kan även ta bort prisexemplen med &hide-examples=1, zooma in med &zoom=1.2 (default: 1.0), och ändra bakgrundsfärgen med &background=ffffff (hex färgkod utan # front).
+
+Exempel: Bädda in elpriset i Stockholm på en annan webbplats med en iframe kod:
+
+<script src="https://www.elprisetjustnu.se/api/v1/iframeResizer.min.js"></script>
+<iframe title="Elpriser från elprisetjustnu.se" src="https://www.elprisetjustnu.se/i/stockholm?mode=embed" style="width:100%;height:800px;border:0;" onload="iFrameResize({heightCalculationMethod: 'taggedElement', checkOrigin: false}, this);"></iframe>
+<p>Elpriser tillhandahålls av <a href="https://www.elprisetjustnu.se">Elpriset just nu.se</a></p>
+
+ 
+RSS-feed
+Dagens och morgondagens elpriser kan även läsas som en löpande text i RSS-format. Kan som allt annat visas fritt, men hänvisa gärna till oss som källa om den visas offentligt.
+
+Bra att veta:
+Historisk data kan endast hämtas till och med 1. november 2022.
+Alla priser er utan moms, tillägg och skatter.
+Morgondagens elpris anländer tidigast kl 13 dagen innan.
+Vi hämtar data direkt från entsoe.eu i euro, med växelkurser från exchangeratesapi.io. Priserna kan därför avvika något från officiella priser, men grunden och variationerna är desamma.
+Så här ser JSON-filen ut:
+Tid och datum visas i ISO 8601-format
+EXR = Växelkursen som används för denna dag från EUR till SEK.
+
+
+[
+  {
+    "SEK_per_kWh": 1.50616,
+    "EUR_per_kWh": 0.13823,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T00:00:00+01:00",
+    "time_end": "2022-11-24T01:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.35449,
+    "EUR_per_kWh": 0.12431,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T01:00:00+01:00",
+    "time_end": "2022-11-24T02:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.32845,
+    "EUR_per_kWh": 0.12192,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T02:00:00+01:00",
+    "time_end": "2022-11-24T03:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.28018,
+    "EUR_per_kWh": 0.11749,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T03:00:00+01:00",
+    "time_end": "2022-11-24T04:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.37203,
+    "EUR_per_kWh": 0.12592,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T04:00:00+01:00",
+    "time_end": "2022-11-24T05:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.6331,
+    "EUR_per_kWh": 0.14988,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T05:00:00+01:00",
+    "time_end": "2022-11-24T06:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.25973,
+    "EUR_per_kWh": 0.20739,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T06:00:00+01:00",
+    "time_end": "2022-11-24T07:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.19429,
+    "EUR_per_kWh": 0.29316,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T07:00:00+01:00",
+    "time_end": "2022-11-24T08:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.36786,
+    "EUR_per_kWh": 0.30909,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T08:00:00+01:00",
+    "time_end": "2022-11-24T09:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.21368,
+    "EUR_per_kWh": 0.29494,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T09:00:00+01:00",
+    "time_end": "2022-11-24T10:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.21455,
+    "EUR_per_kWh": 0.29502,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T10:00:00+01:00",
+    "time_end": "2022-11-24T11:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.15876,
+    "EUR_per_kWh": 0.2899,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T11:00:00+01:00",
+    "time_end": "2022-11-24T12:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.97386,
+    "EUR_per_kWh": 0.27293,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T12:00:00+01:00",
+    "time_end": "2022-11-24T13:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.94106,
+    "EUR_per_kWh": 0.26992,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T13:00:00+01:00",
+    "time_end": "2022-11-24T14:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.96634,
+    "EUR_per_kWh": 0.27224,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T14:00:00+01:00",
+    "time_end": "2022-11-24T15:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.27274,
+    "EUR_per_kWh": 0.30036,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T15:00:00+01:00",
+    "time_end": "2022-11-24T16:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.4328,
+    "EUR_per_kWh": 0.31505,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T16:00:00+01:00",
+    "time_end": "2022-11-24T17:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.51637,
+    "EUR_per_kWh": 0.32272,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T17:00:00+01:00",
+    "time_end": "2022-11-24T18:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.26435,
+    "EUR_per_kWh": 0.29959,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T18:00:00+01:00",
+    "time_end": "2022-11-24T19:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 3.11529,
+    "EUR_per_kWh": 0.28591,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T19:00:00+01:00",
+    "time_end": "2022-11-24T20:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.84997,
+    "EUR_per_kWh": 0.26156,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T20:00:00+01:00",
+    "time_end": "2022-11-24T21:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.50544,
+    "EUR_per_kWh": 0.22994,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T21:00:00+01:00",
+    "time_end": "2022-11-24T22:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 2.36553,
+    "EUR_per_kWh": 0.2171,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T22:00:00+01:00",
+    "time_end": "2022-11-24T23:00:00+01:00"
+  },
+  {
+    "SEK_per_kWh": 1.89199,
+    "EUR_per_kWh": 0.17364,
+    "EXR": 10.896049,
+    "time_start": "2022-11-24T23:00:00+01:00",
+    "time_end": "2022-11-25T00:00:00+01:00"
+  }
+]
+
+
+Some things to get for weather data:
+Hourly:
+
+Temperature (2 m)
+
+Relative Humidity (2 m)
+
+Dewpoint (2 m)
+
+Apparent Temperature
+
+Precipitation (rain + showers + snow)
+
+Rain
+
+Snowfall
+
+Snow Depth
+
+Sea Level Pressure
+
+Surface Pressure
+
+Cloud Cover Total
+
+Wind Speed (10 m)
+
+Wind Speed (80 m)
+
+Wind Speed (120 m)
+
+Wind Speed (180 m)
+
+Wind Direction (10 m)
+
+Wind Direction (80 m)
+
+Wind Direction (120 m)
+
+Wind Direction (180 m)
+
+Wind Gusts (10 m)
+
+Daily:
+
+Maximum Temperature (2 m)
+
+Minimum Temperature (2 m)
+
+Maximum Apparent Temperature (2 m)
+
+Minimum Apparent Temperature (2 m)
+
+Rain Sum
+
+Showers Sum
+
+Snowfall Sum
+
+Precipitation Sum
+
+Precipitation Hours
+
+Precipitation Probability Max
+
+Maximum Wind Speed (10 m)
+
+Maximum Wind Gusts (10 m)
+
+Dominant Wind Direction (10 m)
+
+Sunshine Duration
+
+Shortwave Radiation Sum

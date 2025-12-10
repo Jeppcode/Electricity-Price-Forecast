@@ -1,0 +1,26 @@
+We want to use historical electricity prices together with historical weather data to predict future electricity prices. We will focus on one area (Stockholm). For prices we use the public API from https://www.elprisetjustnu.se/elpris-api, which gives historical data back to November 2022 and also today’s prices. For weather we reuse the provider from Lab 1 (hourly temperature, wind, precipitation, etc.). We will either predict the mean price of the next day or predict the prices for each our the next day, we will see what we end up with. 
+
+
+The pipeline will roughly look like this:
+
+Data and features
+Backfill historical hourly prices from Nov 2022 to now into a feature group.
+Backfill matching hourly weather for the same timestamps into a second feature group.
+Add simple calendar features such as weekday, hour of day etc.
+
+
+Feature view and training
+Build a feature view that joins price, weather and calendar features on timestamp and area.
+Use this to create a training dataset where the label is the next price (either next hour or next day).
+Start with a tree based regression model such as XGBoost and compare it to simple baselines like “same hour yesterday” or “last observed price”.
+Split train and test sets in time order and evaluate with standard regression metrics (MAE, RMSE, MAPE).
+
+
+Dynamic pipeline
+A small job that regularly ingests new price data and matching weather and updates the feature store.
+A retraining job that runs, for example, once per week on a rolling window of recent data, compares the new model to the current one, and only promotes it if it performs better.
+A daily batch inference job that uses the latest model and features to produce predictions for the next 24 hours.
+
+
+Dashboard
+We plan to build a simple dashboard (for example in Streamlit) that shows the predicted prices, hopefully with an hourly view for the coming day. The idea is that it could be used to plan when it is cheapest to run things like dishwasher or shower.

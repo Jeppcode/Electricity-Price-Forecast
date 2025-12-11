@@ -101,6 +101,7 @@ Göra prediktioner med hjälp av modellen och forecast för väder.
 - Skapa plots:
   - Timvis prediktion för elpris.
   - Plot som jämför tidigare prediktioner mot faktiskt utfall.
+  - Spara plots i docs/pricesDashboard/assets/img
 - Spara bilder i en mapp i repot (t.ex. `plots/`) som används av dashboarden.
 
 **Att göra / status**

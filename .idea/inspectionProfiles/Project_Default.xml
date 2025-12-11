@@ -1,0 +1,29 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="hopsworks" />
+          <option value="streamlit" />
+          <option value="email-validator" />
+          <option value="pydantic-settings" />
+          <option value="geopy" />
+          <option value="openmeteo-requests" />
+          <option value="requests-cache" />
+          <option value="retry-requests" />
+          <option value="xgboost" />
+          <option value="scikit-learn" />
+          <option value="matplotlib" />
+          <option value="plotly" />
+          <option value="seaborn" />
+          <option value="nbformat" />
+          <option value="Faker" />
+          <option value="invoke" />
+          <option value="python-dotenv" />
+          <option value="feldera" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

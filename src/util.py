@@ -323,6 +323,38 @@ def get_daily_historical_weather(
     return df
 
 
+def get_yesterday_hourly_weather(
+    latitude: float,
+    longitude: float,
+    city: str = "Stockholm"
+) -> pd.DataFrame:
+    """
+    Convenience helper: hämta gårdagens timvisa väder för givna koordinater.
+    
+    Args:
+        latitude: Latitud
+        longitude: Longitud
+        city: Stadens namn (endast metadata)
+    
+    Returns:
+        DataFrame med timvisa vädervärden för gårdagen.
+    """
+    yesterday = date.today() - timedelta(days=1)
+    iso_date = yesterday.isoformat()
+    
+    df = get_hourly_historical_weather(
+        latitude=latitude,
+        longitude=longitude,
+        start_date=iso_date,
+        end_date=iso_date,
+        city=city,
+    )
+    
+    # Säkerställ att endast gårdagens data returneras om API:t ger marginalt spann
+    df = df[df["date"] == yesterday]
+    return df
+
+
 # =============================================================================
 # Electricity Price Functions
 # =============================================================================

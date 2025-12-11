@@ -1,55 +1,177 @@
-# mlfs-book
-O'Reilly book - Building Machine Learning Systems with a feature store: batch, real-time, and LLMs
+## Notebooks
+
+Nedan är vår struktur för notebooks. Under varje notebook finns:
+- **Syfte**: vad notebooken är till för.
+- **Att göra / status**: checklista som vi uppdaterar löpande.
+- **Kommentarer**: fri text där vi skriver vad som är gjort och vad nästa person behöver veta.
+
+---
+
+### Notebook 1 – Backfill
+
+**Syfte**  
+Körs bara en gång för att hämta historisk data via API och skapa feature groups i Hopsworks.
+
+- Skapa feature groups:
+  - `electricity_prices`
+  - `weather`
+- Feature engineering:
+  - Lägg till veckodag/helg (antingen exakt veckodag eller bara "helg/inte helg").
+  - Få in helgdagar/högtider.
+
+**Att göra / status**
+
+- [X] Hämta historisk elprisd data och skriva till `electricity_prices` feature group.
+- [X] Hämta historisk väderdata och skriva till `weather` feature group.
+- [ ] Implementera logik för veckodag/helg.
+- [ ] Implementera logik för helgdagar/högtider.
+- [X] Verifiera att feature groups ser korrekta ut i Hopsworks.
+- [ ] Dokumentera vilka datumintervall vi backfillat.
+
+**Kommentarer**
+
+- Skriv här efter körning:
+  - Datum då notebooken kördes.
+  - Om det finns kända issues eller workarounds.
+  - Om vissa datum saknar data osv.
+
+---
+
+### Notebook 2 – Daglig uppdatering av data
+
+**Syfte**  
+Hålla databasen uppdaterad med korrekt och sann data.
+
+- Lägg till gårdagens faktiska elpris.
+- Lägg till faktiskt väderutfall från igår.
+
+**Att göra / status**
+
+- [X] Skapa jobb för att hämta gårdagens elpris.
+- [X] Skapa jobb för att hämta gårdagens väder.
+- [X] Uppdatera respektive feature group i Hopsworks.
+- [ ] Säkerställa att notebooken kan köras schemalagt (eller manuellt dagligen).
+- [ ] Logga om uppdateringen lyckades eller inte.
+
+**Kommentarer**
+
+- Skriv här:
+  - Hur notebooken körs i praktiken (manuellt, cron, Airflow osv).
+  - Eventuella problem med API eller tidszoner.
+  - Senaste datum då allt var uppdaterat korrekt.
+
+---
+
+### Notebook 3 – Första basmodellen
+
+**Syfte**  
+Skapa första basmodellen. Körs initialt för att ta fram en första modell.
+
+- Hämta features från Hopsworks (sann data).
+- Skapa och träna en första modell.
+- Göra prediction och utvärdering.
+
+**Att göra / status**
+
+- [ ] Definiera vilka features som ska ingå.
+- [ ] Hämta träningsdata från feature store.
+- [ ] Träna första modellen.
+- [ ] Utvärdera modellen (valfri metrik, t.ex. MAE/MSE).
+- [ ] Logga modellversion och resultat i valfritt system (Hopsworks, MLflow, fil osv).
+- [ ] Spara modellen så att den kan laddas i Notebook 4.
+
+**Kommentarer**
+
+- Skriv här:
+  - Vilken modelltyp vi använder (t.ex. XGBoost, RandomForest, LSTM).
+  - Vilka hyperparametrar som testats.
+  - Kort kommentar om modellens prestanda.
+  - Vad nästa person kan testa härnäst.
+
+---
+
+### Notebook 4 – Predictions och visualisering
+
+**Syfte**  
+Göra prediktioner med hjälp av modellen och forecast för väder.
+
+- Hämta väderprognos för minst en dag framåt (kan utökas senare).
+- Förutspå elpriser för kommande tidsperiod.
+- Skapa feature group om det behövs: `electricity_prices_predictions` med `get_or_create(...)`.
+- Skapa plots:
+  - Timvis prediktion för elpris.
+  - Plot som jämför tidigare prediktioner mot faktiskt utfall.
+- Spara bilder i en mapp i repot (t.ex. `plots/`) som används av dashboarden.
+
+**Att göra / status**
+
+- [ ] Ladda senaste modellversionen.
+- [ ] Hämta väderprognos från API.
+- [ ] Generera features för framtida tidssteg.
+- [ ] Göra prediktioner för elpriser.
+- [ ] Skapa och spara plots i lokala repot (t.ex. `plots/`).
+- [ ] Säkerställa att dashboarden pekar på rätt bildfiler.
+- [ ] Eventuellt skriva prediktioner till Hopsworks feature group.
+
+**Kommentarer**
+
+- Skriv här:
+  - Var bilder sparas och filnamnsstruktur.
+  - Om något måste uppdateras när modellversion ändras.
+  - Hur ofta vi tänker köra notebooken.
+
+---
+
+### Notebook 5 – Regelbunden reträning
+
+**Syfte**  
+Träna om modellen regelbundet, till exempel en gång i veckan.
+
+- Träna om modellen på ny data.
+- Jämför nya modellen mot den gamla.
+- Om nya modellen är bättre: skriv över den gamla och uppdatera produktion.
+
+**Att göra / status**
+
+- [ ] Bestäm träningsfrekvens (t.ex. varje vecka).
+- [ ] Hämta data upp till "nu" från Hopsworks.
+- [ ] Träna ny modell.
+- [ ] Utvärdera ny modell mot valideringsdata.
+- [ ] Jämför med nuvarande produktionsmodell.
+- [ ] Om bättre: uppdatera sparad modellversion.
+- [ ] Logga resultat och beslut (behöll/uppdaterade modellen).
+
+**Kommentarer**
+
+- Skriv här:
+  - Hur jämförelsen görs (vilka metriker, vilka fönster).
+  - Eventuella trösklar för när modellen får bytas ut.
+  - Datum för senaste reträning.
+
+---
+
+## Dashboard
+
+Dashboarden läser in sparade bilder från notebookarna (t.ex. från `plots/`) och uppdateras när nya plots skrivs.
+
+Beskriv kort här hur dashboarden funkar tekniskt (om det är Streamlit, webbapp, Jupyter osv).
+
+---
+
+## Miljö och installation
+
+### Skapa conda eller virtuell miljö
+
+```bash
+conda create -n book
+conda activate book
 
 
-## Lab Description
+# Install 'uv' and 'invoke'
+pip install invoke dotenv
 
-This lab implements a parameterized multi-sensor air-quality forecasting pipeline using the Hopsworks Feature Store. The system ingests air-quality and weather data daily, trains per-sensor models, produces 7-day forecasts, and publishes dashboards through GitHub Pages.
-
-### Data and Feature Engineering
-
-- Historical weather and air-quality data are processed in `1_air_quality_feature_backfill.ipynb`, which prepares backfill features and per-sensor configuration.
-- Daily ingestion in `2_air_quality_feature_pipeline.ipynb` updates two Feature Groups in Hopsworks:
-  - **air_quality** (including lag features pm25_lag_1, pm25_lag_2, pm25_lag_3)
-  - **weather**
-- Predictions from batch inference are stored in the `aq_predictions` Feature Group and later used for hindcast evaluation.
-
-### Modeling
-
-- `3_air_quality_training_pipeline.ipynb` trains a dedicated XGBoost model for each sensor based on a Feature View that joins weather data with the PM2.5 lagged values.
-- A weather-only baseline model is also trained for comparison. We report MSE and R² scores and register each per-sensor model in the Hopsworks Model Registry.
-
-### Inference and Dashboards
-
-- `4_air_quality_batch_inference.ipynb` loads the relevant sensor model and generates a 7-day PM2.5 forecast.
-- If lagged PM2.5 features are used, forecasting is done recursively, rolling predictions forward step by step from D+1 to D+7.
-- Forecast and hindcast plots are exported as PNG images and automatically published to GitHub Pages. The hindcast view compares predictions with actual observed values when available.
-
-### Orchestration
-
-- `.github/workflows/air-quality-daily.yml` executes the full pipeline every day using a GitHub Actions job matrix with `SENSOR_SLUG` for per-sensor runs.
-- All generated artifacts and dashboard images are stored under sensor-specific paths to avoid conflicts.
-
-**Dashboard:**  
-https://jeppcode.github.io/mlfs-book/
-
-## ML System Examples
-
-
-[Link to our dashboard:](https://jeppcode.github.io/mlfs-book/)
-
-# Run Air Quality Tutorial
-
-See [tutorial instructions here](https://docs.google.com/document/d/1YXfM1_rpo1-jM-lYyb1HpbV9EJPN6i1u6h2rhdPduNE/edit?usp=sharing)
-    # Create a conda or virtual environment for your project
-    conda create -n book 
-    conda activate book
-
-    # Install 'uv' and 'invoke'
-    pip install invoke dotenv
-
-    # 'invoke install' installs python dependencies using uv and requirements.txt
-    invoke install
+# 'invoke install' installs python dependencies using uv and requirements.txt
+invoke install
 
 
 ## PyInvoke

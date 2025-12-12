@@ -18,6 +18,8 @@ from geopy.geocoders import Nominatim
 import openmeteo_requests
 import requests_cache
 from retry_requests import retry
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 
 # =============================================================================
@@ -709,3 +711,94 @@ def add_price_lag_features(
         df[f'price_lag_{lag}h'] = df['price_sek'].shift(lag).astype('float32')
     
     return df
+
+
+# =============================================================================
+# Plotting Helpers
+# =============================================================================
+
+def plot_electricity_price_forecast(
+    price_area: str,
+    df: pd.DataFrame,
+    file_path: str,
+    hindcast: bool = False,
+    window_days: int | None = 21,
+) -> plt.Figure:
+    """
+    Plot predicted electricity prices (and actuals if hindcast).
+
+    Args:
+        price_area: Price area label, e.g. "SE3"
+        df: DataFrame with columns:
+            - date
+            - predicted_price_sek
+            - actual price column (electricity_prices_price_sek or price_sek) if hindcast
+        file_path: Path to save the figure
+        hindcast: If True, also plot actuals and set x-limits to recent period
+    """
+    # If hindcast, optionally limit to recent window for readability
+    if hindcast and window_days is not None and "date" in df.columns:
+        try:
+            df = df.copy()
+            df["date"] = pd.to_datetime(df["date"])
+            cutoff = df["date"].max() - pd.Timedelta(days=window_days)
+            df = df[df["date"] >= cutoff]
+        except Exception:
+            pass
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    day = pd.to_datetime(df["date"])
+    ax.plot(
+        day,
+        df["predicted_price_sek"],
+        label="Predicted price (SEK/kWh)",
+        color="red",
+        linewidth=2,
+        marker="o",
+        markersize=4,
+        markerfacecolor="white",
+    )
+
+    actual_col = "electricity_prices_price_sek" if "electricity_prices_price_sek" in df.columns else "price_sek"
+    if hindcast and actual_col in df.columns:
+        ax.plot(
+            day,
+            df[actual_col],
+            label="Actual price (SEK/kWh)",
+            color="black",
+            linewidth=2,
+            marker="^",
+            markersize=4,
+            markerfacecolor="grey",
+        )
+
+    ax.set_xlabel("Date")
+    ax.set_ylabel("SEK / kWh")
+    ax.set_title(f"Electricity price hindcast for {price_area}")
+    ax.grid(True, linestyle="--", alpha=0.4)
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=10))
+    plt.xticks(rotation=45)
+
+    # Keep y-axis reasonable
+    try:
+        y_min = min(df["predicted_price_sek"].min(), df[actual_col].min() if hindcast and actual_col in df.columns else np.inf)
+        y_max = max(df["predicted_price_sek"].max(), df[actual_col].max() if hindcast and actual_col in df.columns else -np.inf)
+        if np.isfinite(y_min) and np.isfinite(y_max):
+            pad = (y_max - y_min) * 0.1 if y_max > y_min else 0.1
+            ax.set_ylim(bottom=y_min - pad, top=y_max + pad)
+    except Exception:
+        pass
+
+    if hindcast:
+        try:
+            x_left = pd.Timestamp(df["date"].min()) - pd.Timedelta(days=2)
+            x_right = pd.Timestamp(df["date"].max()) + pd.Timedelta(days=2)
+            ax.set_xlim(left=x_left, right=x_right)
+        except Exception:
+            pass
+
+    ax.legend(loc="best")
+    plt.tight_layout()
+    plt.savefig(file_path)
+    return fig

@@ -17,3 +17,5 @@ invoke
 python-dotenv
 tqdm
 #feldera==0.41
+papermill
+holidays

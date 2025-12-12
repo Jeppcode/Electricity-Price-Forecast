@@ -23,9 +23,9 @@ Körs bara en gång för att hämta historisk data via API och skapa feature gro
 
 - [X] Hämta historisk elprisd data och skriva till `electricity_prices` feature group.
 - [X] Hämta historisk väderdata och skriva till `weather` feature group.
-- [ ] Implementera logik för veckodag/helg.
-- [ ] Implementera logik för helgdagar/högtider.
-- [ ] Implementera lagged features. 
+- [X] Implementera logik för veckodag/helg.
+- [X] Implementera logik för helgdagar/högtider.
+- [X] Implementera lagged features. 
 - [X] Verifiera att feature groups ser korrekta ut i Hopsworks.
 
 **Kommentarer**
@@ -67,12 +67,12 @@ Skapa första basmodellen. Körs initialt för att ta fram en första modell.
 
 **Att göra / status**
 
-- [ ] Definiera vilka features som ska ingå.
-- [ ] Hämta träningsdata från feature store.
-- [ ] Träna första modellen.
-- [ ] Utvärdera modellen (valfri metrik, t.ex. MAE/MSE).
-- [ ] Logga modellversion och resultat i valfritt system (Hopsworks, MLflow, fil osv).
-- [ ] Spara modellen så att den kan laddas i Notebook 4.
+- [X] Definiera vilka features som ska ingå.
+- [X] Hämta träningsdata från feature store.
+- [X] Träna första modellen.
+- [X] Utvärdera modellen (valfri metrik, t.ex. MAE/MSE).
+- [X] Logga modellversion och resultat i valfritt system (Hopsworks, MLflow, fil osv).
+- [X] Spara modellen så att den kan laddas i Notebook 4.
 
 **Kommentarer**
 

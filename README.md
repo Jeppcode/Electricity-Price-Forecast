@@ -25,15 +25,12 @@ Körs bara en gång för att hämta historisk data via API och skapa feature gro
 - [X] Hämta historisk väderdata och skriva till `weather` feature group.
 - [ ] Implementera logik för veckodag/helg.
 - [ ] Implementera logik för helgdagar/högtider.
+- [ ] Implementera lagged features. 
 - [X] Verifiera att feature groups ser korrekta ut i Hopsworks.
-- [ ] Dokumentera vilka datumintervall vi backfillat.
 
 **Kommentarer**
+- 
 
-- Skriv här efter körning:
-  - Datum då notebooken kördes.
-  - Om det finns kända issues eller workarounds.
-  - Om vissa datum saknar data osv.
 
 ---
 
@@ -55,10 +52,7 @@ Hålla databasen uppdaterad med korrekt och sann data.
 
 **Kommentarer**
 
-- Skriv här:
-  - Hur notebooken körs i praktiken (manuellt, cron, Airflow osv).
-  - Eventuella problem med API eller tidszoner.
-  - Senaste datum då allt var uppdaterat korrekt.
+Har lagt till så att notebook 2 ska köras dagligen, första körning blir 12/12. Vi får se om det fungerar.
 
 ---
 

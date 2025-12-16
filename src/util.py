@@ -802,3 +802,72 @@ def plot_electricity_price_forecast(
     plt.tight_layout()
     plt.savefig(file_path)
     return fig
+
+
+def plot_next_day_price_forecast(
+    forecast_df: pd.DataFrame,
+    price_area: str,
+    file_path: str | None = None,
+) -> plt.Figure:
+    """
+    Plot next-day hourly price forecast and highlight cheapest/expensive hours.
+
+    Args:
+        forecast_df: DataFrame with columns ['date','hour','predicted_price_sek']
+        price_area: Price area label
+        file_path: Optional path to save figure
+    """
+    df = forecast_df.copy()
+    df['date'] = pd.to_datetime(df['date'])
+    df = df.sort_values(['date', 'hour'])
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.bar(df['hour'], df['predicted_price_sek'], color="#1f77b4", alpha=0.8, label="Predicted price")
+
+    # Highlight cheapest / 2nd cheapest and most / 2nd most expensive
+    idx_min = df['predicted_price_sek'].idxmin()
+    idx_second_min = df.nsmallest(2, 'predicted_price_sek').index[-1] if len(df) > 1 else idx_min
+    idx_max = df['predicted_price_sek'].idxmax()
+    idx_second_max = df.nlargest(2, 'predicted_price_sek').index[-1] if len(df) > 1 else idx_max
+
+    ax.bar(df.loc[idx_min, 'hour'], df.loc[idx_min, 'predicted_price_sek'], color="green", alpha=0.9, label="Cheapest")
+    if idx_second_min != idx_min:
+        ax.bar(df.loc[idx_second_min, 'hour'], df.loc[idx_second_min, 'predicted_price_sek'], color="#90ee90", alpha=0.9, label="2nd cheapest")
+
+    ax.bar(df.loc[idx_max, 'hour'], df.loc[idx_max, 'predicted_price_sek'], color="red", alpha=0.9, label="Most expensive")
+    if idx_second_max != idx_max:
+        ax.bar(df.loc[idx_second_max, 'hour'], df.loc[idx_second_max, 'predicted_price_sek'], color="#ffa500", alpha=0.9, label="2nd most expensive")
+
+    # Annotate primary extremes
+    ax.annotate(
+        f"Min {df.loc[idx_min, 'predicted_price_sek']:.3f} SEK",
+        xy=(df.loc[idx_min, 'hour'], df.loc[idx_min, 'predicted_price_sek']),
+        xytext=(0, 12),
+        textcoords="offset points",
+        ha="center",
+        color="green",
+        fontsize=9,
+        fontweight="bold",
+    )
+    ax.annotate(
+        f"Max {df.loc[idx_max, 'predicted_price_sek']:.3f} SEK",
+        xy=(df.loc[idx_max, 'hour'], df.loc[idx_max, 'predicted_price_sek']),
+        xytext=(0, -14),
+        textcoords="offset points",
+        ha="center",
+        color="red",
+        fontsize=9,
+        fontweight="bold",
+    )
+
+    ax.set_xlabel("Hour (0-23)")
+    ax.set_ylabel("Predicted price (SEK/kWh)")
+    ax.set_title(f"Next-day hourly electricity price forecast – {price_area}")
+    ax.grid(True, axis="y", linestyle="--", alpha=0.4)
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.legend(loc="best")
+    plt.tight_layout()
+
+    if file_path:
+        plt.savefig(file_path)
+    return fig

@@ -2,6 +2,7 @@ name: run-notebook-2
 on:
   schedule:
     - cron: "0 8 * * *"
+    - cron: "30 8 1 * *" # monthly for training and inference
   workflow_dispatch:
 
 jobs:
@@ -24,3 +25,30 @@ jobs:
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
         run: python -m papermill NotebooksElectricity/2_electricity_prices_feature_pipeline.ipynb /tmp/out.ipynb
+
+  monthly-train-and-infer:
+
+    if: github.event_name == 'schedule' && github.event.schedule == '30 8 1 * *'
+    needs: run
+    runs-on: ubuntu-latest
+    env:
+      HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+      HOPSWORKS_HOST: ${{ secrets.HOPSWORKS_HOST }}
+      ELPRICE_BASE_URL: ${{ secrets.ELPRICE_BASE_URL }}
+      ELPRICE_AREA: ${{ secrets.ELPRICE_AREA }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          pip install -r requirements.txt
+          pip install papermill
+      - name: Run notebook 3 (training)
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+        run: python -m papermill NotebooksElectricity/3_electricity_prices_training_pipeline.ipynb /tmp/out3.ipynb
+      - name: Run notebook 4 (batch inference)
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+        run: python -m papermill NotebooksElectricity/4_electricity_prices_batch_inference.ipynb /tmp/out4.ipynb

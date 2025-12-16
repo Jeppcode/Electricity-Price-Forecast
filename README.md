@@ -119,6 +119,8 @@ Göra prediktioner med hjälp av modellen och forecast för väder.
 
 ### Notebook 5 – Regelbunden reträning
 
+Vi implenterar att notebook 3 körs regelbundet så kan vi skippa notebook 5 helt. Skillnaden blir att vi alltid ersätter den befingliga modellen med den nya. 
+
 **Syfte**  
 Träna om modellen regelbundet, till exempel en gång i veckan.
 
@@ -191,3 +193,33 @@ docker run -p 8080:8080 \
   --tty --rm -it ghcr.io/feldera/pipeline-manager:latest
 
 
+
+
+
+# Old daily run
+name: run-notebook-2
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+      HOPSWORKS_HOST: ${{ secrets.HOPSWORKS_HOST }}
+      ELPRICE_BASE_URL: ${{ secrets.ELPRICE_BASE_URL }}
+      ELPRICE_AREA: ${{ secrets.ELPRICE_AREA }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          pip install -r requirements.txt
+          pip install papermill
+      - name: Run notebook 2
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+        run: python -m papermill NotebooksElectricity/2_electricity_prices_feature_pipeline.ipynb /tmp/out.ipynb

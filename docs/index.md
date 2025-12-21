@@ -7,78 +7,109 @@ title: Elprisprognos SE3
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-    .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+    .glass-card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow: hidden; }
+    .glass-header { background: #0f172a; color: white; }
 </style>
 
 <div class="min-h-screen pb-12">
-    
-    <header class="bg-slate-900 text-white py-12 shadow-xl border-b-4 border-blue-500">
-        <div class="max-w-6xl mx-auto px-4 text-center">
+
+    <header class="glass-header py-10 shadow-lg mb-8 border-b-4 border-blue-500">
+        <div class="max-w-7xl mx-auto px-4 text-center">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">⚡ Elprisprognos <span class="text-blue-400">SE3</span></h1>
-            <p class="text-slate-400 text-lg max-w-2xl mx-auto">AI-driven prediktion för Stockholms elområde baserat på realtidsväder och historiska data.</p>
+            <p class="text-slate-400 text-lg">AI-driven analys för smartare elanvändning i Stockholm.</p>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
-        
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="glass-panel p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center text-center">
-                <span class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Pipeline Status</span>
-                <div class="flex items-center mt-2">
-                    <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></span>
-                    <span class="text-xl font-bold text-slate-800">Operational</span>
+            <div class="glass-card p-4 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Status</p>
+                    <p class="text-xl font-bold text-green-600 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Uppdaterad
+                    </p>
                 </div>
-                <p class="text-xs text-slate-400 mt-2">Uppdateras dagligen 08:00</p>
+                <div class="text-3xl">✅</div>
             </div>
-            
-            <div class="glass-panel p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center text-center">
-                <span class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Modelltyp</span>
-                <div class="text-xl font-bold text-slate-800 mt-2">XGBoost Regressor</div>
-                <p class="text-xs text-slate-400 mt-2">Tränad på historisk data & väder</p>
+            <div class="glass-card p-4 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Område</p>
+                    <p class="text-xl font-bold text-slate-800">SE3 (Sthlm)</p>
+                </div>
+                <div class="text-3xl">📍</div>
             </div>
-
-             <div class="glass-panel p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center text-center">
-                <span class="text-slate-500 text-sm uppercase tracking-wider font-semibold">Elområde</span>
-                <div class="text-xl font-bold text-slate-800 mt-2">SE3 (Stockholm)</div>
-                <p class="text-xs text-slate-400 mt-2">Påverkas av vind, temp & nederbörd</p>
+            <div class="glass-card p-4 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">AI Modell</p>
+                    <p class="text-xl font-bold text-slate-800">XGBoost</p>
+                </div>
+                <div class="text-3xl">🤖</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
-                    Prisprognos (Nästa 24h)
-                </h2>
-                <div class="overflow-hidden rounded-lg bg-slate-50 p-1 border border-slate-100">
-                    <img src="./PricesDashboard/assets/img/electricity_price_forecast_se3.png" class="w-full h-auto transform hover:scale-[1.02] transition-transform duration-300" alt="Prisprognos">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <div class="lg:col-span-8 space-y-8">
+                
+                <div class="glass-card">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800">🔌 Ladda Smart Imorgon</h2>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Rekommendation</span>
+                    </div>
+                    <div class="p-4">
+                        <img src="PricesDashboard/assets/img/electricity_price_signal.png" class="w-full h-auto rounded-lg" alt="Ladda smart signal">
+                        <div class="mt-4 bg-green-50 p-4 rounded-md border border-green-100 text-sm text-green-800">
+                            <strong>Tips:</strong> Planera din energianvändning (tvätt, disk, laddning) till de timmar där staplarna är gröna. Då är priset lägre än dygnssnittet.
+                        </div>
+                    </div>
                 </div>
-                <p class="mt-4 text-sm text-slate-500 leading-relaxed">
-                    Grafen ovan visar vår modells prediktion (orange) jämfört med faktiskt utfall (blå, om tillgängligt) för de senaste timmarna samt prognos framåt.
-                </p>
+
+                <div class="glass-card">
+                     <div class="p-6 border-b border-slate-100 bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800">📈 Pristrend: Historik & Framtid</h2>
+                    </div>
+                    <div class="p-4">
+                        <img src="PricesDashboard/assets/img/price_trend.png" class="w-full h-auto rounded-lg" alt="Pristrend">
+                        <p class="mt-2 text-slate-500 text-sm">Grafen visar faktiskt utfall för de senaste dagarna (svart) och vår prognos framåt (orange).</p>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100">
-                <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Ladda Smart
-                </h2>
-                <div class="overflow-hidden rounded-lg bg-slate-50 p-1 border border-slate-100">
-                    <img src="./PricesDashboard/assets/img/electricity_price_signal.png" onerror="this.src='https://placehold.co/600x400?text=Graf+kommer+snart...'" class="w-full h-auto transform hover:scale-[1.02] transition-transform duration-300" alt="Ladda smart signal">
+            <div class="lg:col-span-4 space-y-8">
+                
+                <div class="glass-card h-full">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800">🔍 Vad styr priset?</h2>
+                    </div>
+                    <div class="p-4 flex flex-col items-center">
+                        <img src="PricesDashboard/assets/img/feature_importance.png" class="w-full h-auto rounded-lg shadow-sm mb-4" alt="Feature Importance">
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            Vår AI-modell analyserar hundratals datapunkter. Just nu är det dessa faktorer (ovan) som har störst påverkan på elpriset.
+                            <br><br>
+                            <em>Ofta ser vi att "Lags" (vad priset var igår) och vindhastighet är avgörande.</em>
+                        </p>
+                    </div>
                 </div>
-                <p class="mt-4 text-sm text-slate-500 leading-relaxed">
-                    Gröna staplar indikerar timmar där priset förväntas vara lägre än dygnsmedlet. Planera din energianvändning (tvättmaskin, elbilsladdning) till dessa timmar.
-                </p>
+
+                 <div class="glass-card bg-slate-900 text-white p-6">
+                    <h3 class="font-bold text-lg mb-2">Om Projektet</h3>
+                    <p class="text-slate-300 text-sm mb-4">
+                        Detta är ett serverless ML-system byggt med Hopsworks & GitHub Actions.
+                    </p>
+                    <a href="https://github.com/Jeppcode/Project" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded transition">
+                        Se koden på GitHub &rarr;
+                    </a>
+                </div>
+
             </div>
-
         </div>
-
-        <div class="mt-12 text-center text-slate-400 text-sm">
-            <p>Projektet är en del av kursen i Scalable Machine Learning.</p>
-            <p class="mt-2">Byggt med <a href="https://hopsworks.ai" class="underline hover:text-blue-500">Hopsworks</a>, <a href="https://github.com/features/actions" class="underline hover:text-blue-500">GitHub Actions</a> & Python.</p>
-        </div>
+        
+        <footer class="mt-12 text-center text-slate-400 text-sm pb-8">
+            &copy; 2025 Scalable Machine Learning Project.
+        </footer>
 
     </main>
 </div>

@@ -1,8 +1,8 @@
 name: run-notebook-2
 on:
   schedule:
-    - cron: "0 8 * * *"
-    - cron: "30 8 1 * *" # monthly for training and inference
+    - cron: "0 2 * * *"
+    - cron: "30 8 1 * *" # monthly for training
   workflow_dispatch:
 
 jobs:
@@ -25,6 +25,10 @@ jobs:
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
         run: python -m papermill NotebooksElectricity/2_electricity_prices_feature_pipeline.ipynb /tmp/out.ipynb
+      - name: Run notebook 4 (batch inference)
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+        run: python -m papermill NotebooksElectricity/4_electricity_prices_batch_inference.ipynb /tmp/out4_daily.ipynb
 
   monthly-train-and-infer:
 
@@ -48,7 +52,3 @@ jobs:
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
         run: python -m papermill NotebooksElectricity/3_electricity_prices_training_pipeline.ipynb /tmp/out3.ipynb
-      - name: Run notebook 4 (batch inference)
-        env:
-          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-        run: python -m papermill NotebooksElectricity/4_electricity_prices_batch_inference.ipynb /tmp/out4.ipynb

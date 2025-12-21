@@ -1,45 +1,74 @@
 ---
 layout: default
-title: Elprisprognos SE3
+title: Elprisprognos
 ---
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<div class="bg-gray-50 min-h-screen pb-12">
-    <header class="bg-blue-600 py-8 mb-8 shadow-lg">
-        <div class="max-w-5xl mx-auto px-4">
-            <h1 class="text-3xl font-bold text-white">Electricity Price Dashboard</h1>
-            <p class="text-blue-100 mt-2">Prediktioner för Stockholm (SE3) baserat på väder och historik.</p>
-        </div>
-    </header>
+<style>
+    /* Döljer standard-headern i många Jekyll-teman (Minima, Just the Docs etc) */
+    .site-header, .site-title, header[role="banner"], .wrapper > header {
+        display: none !important;
+    }
+    /* Tar bort default margins från temat så vår design fyller ut */
+    body, .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        background-color: #0f172a !important; /* Matchar slate-900 */
+    }
+</style>
 
-    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-slate-900 min-h-screen text-gray-100 font-sans">
+    
+    <div class="bg-blue-700 py-8 mb-8 shadow-xl border-b border-blue-800">
+        <div class="max-w-6xl mx-auto px-6">
+            <h1 class="text-4xl font-extrabold text-white tracking-tight">Electricity Price Dashboard</h1>
+            <p class="text-blue-200 mt-2 text-lg">Prediktioner för Stockholm (SE3)</p>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12">
         
-        <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Morgondagens priser (Prediktion)</h2>
-            <img src="./PricesDashboard/assets/img/electricity_price_forecast_se3.png" class="w-full h-auto rounded-lg" alt="Prognosgraf">
-            <p class="mt-4 text-sm text-gray-500 text-center">Grafen uppdateras dagligen via GitHub Actions.</p>
+        <div class="lg:col-span-2 bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
+            <div class="p-6 border-b border-slate-700">
+                <h2 class="text-2xl font-bold text-white">Prisprognos (SEK/kWh)</h2>
+                <p class="text-slate-400 text-sm mt-1">Historisk data + Prognos för nästa dygn</p>
+            </div>
+            <div class="p-6 bg-white"> <img src="assets/img/electricity_price_forecast_se3.png" class="w-full h-auto rounded" alt="Grafen kunde inte laddas. Kontrollera att Github Actions har kört.">
+            </div>
+            <div class="p-4 bg-slate-800 text-center">
+                <p class="text-xs text-slate-500">Uppdateras automatiskt kl 08:00</p>
+            </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800 uppercase tracking-wider">Modellens Träffsäkerhet</h2>
-            <img src="./PricesDashboard/assets/img/model_performance.png" class="w-full h-auto rounded-lg" alt="Modellprestanda saknas">
-        </div>
+        <div class="space-y-8">
+            
+            <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+                <h2 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">SYSTEMSTATUS</h2>
+                <ul class="space-y-4">
+                    <li class="flex items-center justify-between">
+                        <span class="text-slate-300">Pipeline</span>
+                        <span class="px-3 py-1 bg-green-900 text-green-300 text-xs font-bold rounded-full border border-green-700">ONLINE</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-slate-300">Feature Store</span>
+                        <span class="px-3 py-1 bg-blue-900 text-blue-300 text-xs font-bold rounded-full border border-blue-700">HOPSWORKS</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                        <span class="text-slate-300">Modell</span>
+                        <span class="text-sm font-mono text-purple-400">XGBoost</span>
+                    </li>
+                </ul>
+            </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800 uppercase tracking-wider">Systemstatus</h2>
-            <ul class="space-y-3 mt-4">
-                <li class="flex items-center text-sm text-gray-600">
-                    <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span> Pipeline: GitHub Actions Aktiv
-                </li>
-                <li class="flex items-center text-sm text-gray-600">
-                    <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Feature Store: Hopsworks
-                </li>
-                <li class="flex items-center text-sm text-gray-600">
-                    <span class="w-3 h-3 bg-purple-500 rounded-full mr-2"></span> Modell: XGBoost Regressor
-                </li>
-            </ul>
-        </div>
+            <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+                <h2 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">TRÄFFSÄKERHET</h2>
+                <div class="bg-white rounded p-2">
+                    <img src="assets/img/model_performance.png" class="w-full h-auto" alt="Prestandagraf saknas">
+                </div>
+            </div>
 
+        </div>
     </main>
 </div>

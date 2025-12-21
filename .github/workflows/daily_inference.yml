@@ -1,0 +1,47 @@
+name: Daily Inference Pipeline
+
+on:
+  workflow_dispatch:      # Gör att du kan klicka på en knapp för att köra
+  schedule:
+    - cron: '0 9 * * *'   # Körs automatiskt kl 09:00 varje dag
+
+jobs:
+  run-inference:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # Ger tillåtelse att spara den nya bilden
+      
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install jupyter nbconvert
+
+      - name: Run Notebook 4 (Inference)
+        env:
+          # Dessa hemligheter måste finnas i Settings -> Secrets and variables
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+        run: |
+          # Kör notebooken och spara resultatet på plats
+          jupyter nbconvert --to notebook --execute 4_electricity_prices_batch_inference.ipynb --inplace
+
+      - name: Commit and Push new plots
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Lägg till de nya bilderna
+          git add docs/PricesDashboard/assets/img/*.png
+          
+          # Commita bara om det finns ändringar
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generated dashboard plots" && git push)

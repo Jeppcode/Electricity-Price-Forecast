@@ -18,12 +18,12 @@ title: Elprisprognos SE3
         <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-200">
             <h2 class="text-2xl font-bold mb-4 text-gray-800">Morgondagens priser (Prediktion)</h2>
             <img src="./PricesDashboard/assets/img/electricity_price_forecast_se3.png" class="w-full h-auto rounded-lg" alt="Prognosgraf">
-            <p class="mt-4 text-sm text-gray-500 text-center">Grafen uppdateras dagligen kl 08:00 via GitHub Actions.</p>
+            <p class="mt-4 text-sm text-gray-500 text-center">Grafen uppdateras dagligen via GitHub Actions.</p>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
             <h2 class="text-2xl font-bold mb-4 text-gray-800 uppercase tracking-wider">Modellens Träffsäkerhet</h2>
-            <img src="./PricesDashboard/assets/img/model_performance.png" class="w-full h-auto" alt="Modellprestanda">
+            <img src="./PricesDashboard/assets/img/model_performance.png" class="w-full h-auto rounded-lg" alt="Modellprestanda saknas">
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
@@ -34,6 +34,9 @@ title: Elprisprognos SE3
                 </li>
                 <li class="flex items-center text-sm text-gray-600">
                     <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Feature Store: Hopsworks
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <span class="w-3 h-3 bg-purple-500 rounded-full mr-2"></span> Modell: XGBoost Regressor
                 </li>
             </ul>
         </div>

@@ -33,7 +33,7 @@ jobs:
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         run: |
           # Kör notebooken och spara resultatet på plats
-          jupyter nbconvert --to notebook --execute 4_electricity_prices_batch_inference.ipynb --inplace
+          jupyter nbconvert --to notebook --execute jupyter nbconvert --to notebook --execute NotebooksElectricity/4_electricity_prices_batch_inference.ipynb --inplace
 
       - name: Commit and Push new plots
         run: |

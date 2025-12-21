@@ -1,110 +1,41 @@
 ---
 layout: default
-title: Electricity Price Forecast SE3
+title: Elprisprognos SE3
 ---
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-<style>
-    body { 
-        font-family: 'Inter', sans-serif; 
-        background-color: #020617; /* Very Dark Slate */
-        color: #e2e8f0; 
-    }
-    .dark-panel { 
-        background: #1e293b; /* Slate 800 */
-        border: 1px solid #334155; 
-        border-radius: 1rem; 
-        overflow: hidden; 
-    }
-    .accent { color: #38bdf8; }
-</style>
-
-<div class="min-h-screen pb-12">
-
-    <header class="border-b border-slate-800 bg-slate-900 py-10 mb-8">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-white">
-                ⚡ Electricity Price <span class="accent">Forecast</span>
-            </h1>
-            <p class="text-slate-400">Stockholm Region (SE3) • AI-Powered</p>
+<div class="bg-gray-50 min-h-screen pb-12">
+    <header class="bg-blue-600 py-8 mb-8 shadow-lg">
+        <div class="max-w-5xl mx-auto px-4">
+            <h1 class="text-3xl font-bold text-white">Electricity Price Dashboard</h1>
+            <p class="text-blue-100 mt-2">Prediktioner för Stockholm (SE3) baserat på väder och historik.</p>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="dark-panel p-6 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase">System Status</p>
-                    <p class="text-xl font-bold text-emerald-400 mt-1">● Operational</p>
-                </div>
-            </div>
-            <div class="dark-panel p-6 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase">Region</p>
-                    <p class="text-xl font-bold text-white mt-1">SE3 Stockholm</p>
-                </div>
-                <div class="text-2xl">📍</div>
-            </div>
-            <div class="dark-panel p-6 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase">Model</p>
-                    <p class="text-xl font-bold text-white mt-1">XGBoost</p>
-                </div>
-                <div class="text-2xl">🤖</div>
-            </div>
+    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Morgondagens priser (Prediktion)</h2>
+            <img src="./PricesDashboard/assets/img/electricity_price_forecast_se3.png" class="w-full h-auto rounded-lg" alt="Prognosgraf">
+            <p class="mt-4 text-sm text-gray-500 text-center">Grafen uppdateras dagligen kl 08:00 via GitHub Actions.</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 uppercase tracking-wider">Modellens Träffsäkerhet</h2>
+            <img src="./PricesDashboard/assets/img/model_performance.png" class="w-full h-auto" alt="Modellprestanda">
+        </div>
 
-            <div class="lg:col-span-8 space-y-8">
-                
-                <div class="dark-panel">
-                    <div class="p-5 border-b border-slate-700 bg-slate-800 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-white">🔌 Smart Charging Guide</h2>
-                        <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2 py-1 rounded">Recommendation</span>
-                    </div>
-                    <div class="p-5">
-                        <img src="PricesDashboard/assets/img/electricity_price_signal.png" class="w-full h-auto rounded border border-slate-700" alt="Charging Signal">
-                        <p class="mt-4 text-emerald-200 text-sm bg-emerald-900/20 p-3 rounded border border-emerald-500/20">
-                            <strong>Tip:</strong> Aim for the <span class="text-emerald-400 font-bold">Green bars</span>. These hours are cheaper than the daily average.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="dark-panel">
-                     <div class="p-5 border-b border-slate-700 bg-slate-800">
-                        <h2 class="text-lg font-bold text-white">📈 Price Trend & Forecast</h2>
-                    </div>
-                    <div class="p-5">
-                        <img src="PricesDashboard/assets/img/price_trend.png" class="w-full h-auto rounded border border-slate-700" alt="Price Trend">
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="lg:col-span-4 space-y-8">
-                
-                <div class="dark-panel">
-                    <div class="p-5 border-b border-slate-700 bg-slate-800">
-                        <h2 class="text-lg font-bold text-white">🔍 Key Drivers</h2>
-                    </div>
-                    <div class="p-5">
-                        <img src="PricesDashboard/assets/img/feature_importance.png" class="w-full h-auto rounded border border-slate-700 mb-4" alt="Feature Importance">
-                        <p class="text-slate-400 text-xs">
-                            The graph above shows which factors (weather, lags) currently influence the electricity price the most.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="text-center text-slate-500 text-sm">
-                    <p>&copy; 2025 Scalable Machine Learning.</p>
-                    <a href="https://github.com/Jeppcode/Project" class="text-blue-500 hover:underline">View on GitHub</a>
-                </div>
-
-            </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 uppercase tracking-wider">Systemstatus</h2>
+            <ul class="space-y-3 mt-4">
+                <li class="flex items-center text-sm text-gray-600">
+                    <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span> Pipeline: GitHub Actions Aktiv
+                </li>
+                <li class="flex items-center text-sm text-gray-600">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Feature Store: Hopsworks
+                </li>
+            </ul>
         </div>
 
     </main>

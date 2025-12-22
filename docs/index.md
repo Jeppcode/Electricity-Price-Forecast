@@ -109,31 +109,45 @@ title: Electricity Price Forecast SE3
                     </div>
                 </div>
 
+                <div class="dark-card">
+                    <div class="p-6 border-b border-slate-700 bg-slate-800/50">
+                        <h2 class="text-xl font-bold text-white">🔍 Key Drivers (Feature Importance)</h2>
+                    </div>
+                    <div class="p-6 bg-white/5">
+                        <div class="rounded-lg overflow-hidden border border-slate-600 w-full mb-4">
+                            <img src="PricesDashboard/assets/img/feature_importance.png" class="w-full h-auto object-cover" alt="Feature Importance">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-400">
+                            <p>
+                                <strong>Understanding the graph:</strong> This chart shows which factors (features) the AI model finds most important when setting the price.
+                            </p>
+                            <p>
+                                <em>"Lags" (e.g., price_lag_24) represent past prices, indicating that electricity prices often repeat patterns from exactly 24 or 48 hours ago.</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="lg:col-span-4 space-y-8">
                 
-                <div class="dark-card h-full">
-                    <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white">🔍 Key Drivers</h2>
-                    </div>
-                    <div class="p-6 flex flex-col items-center bg-white/5">
-                        <div class="rounded-lg overflow-hidden border border-slate-600 w-full mb-4">
-                            <img src="PricesDashboard/assets/img/feature_importance.png" class="w-full h-auto object-contain" alt="Feature Importance">
-                        </div>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            What affects the price right now? Our model identifies these features (above) as the most significant drivers.
-                            <br><br>
-                            <em>"Lags" represent past prices, indicating that electricity prices often follow strong 24h/48h patterns.</em>
-                        </p>
-                    </div>
-                </div>
-
-                 <div class="dark-card bg-gradient-to-br from-slate-800 to-slate-900 p-6 border-blue-500/30 border">
-                    <h3 class="font-bold text-lg text-white mb-2">About the Project</h3>
-                    <p class="text-slate-400 text-sm mb-6">
-                        A serverless Machine Learning pipeline built with <strong>Hopsworks</strong> Feature Store & <strong>GitHub Actions</strong>.
+                <div class="dark-card bg-gradient-to-br from-slate-800 to-slate-900 p-6 border-blue-500/30 border sticky top-6">
+                    <h3 class="font-bold text-lg text-white mb-4">About the Project</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                        This is a serverless Machine Learning pipeline built with <strong>Hopsworks</strong> Feature Store & <strong>GitHub Actions</strong>.
                     </p>
+                    <ul class="space-y-2 mb-6 text-sm text-slate-400">
+                        <li class="flex items-center gap-2">
+                            <span class="text-blue-500">✓</span> Daily Data Fetching
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-blue-500">✓</span> XGBoost Training
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-blue-500">✓</span> Automated Inference
+                        </li>
+                    </ul>
                     <a href="https://github.com/Jeppcode/Project" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg shadow-blue-500/20">
                         View Code on GitHub
                     </a>

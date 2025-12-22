@@ -58,7 +58,7 @@ title: Electricity Price Forecast SE3
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Region</p>
                     <p class="text-2xl font-bold text-white mt-1">SE3 Stockholm</p>
                 </div>
-                <div class="text-3xl opacity-50">📍</div>
+                <div class="text-3xl opacity-50"></div>
             </div>
 
             <div class="dark-card p-6 flex items-center justify-between hover:border-blue-500 transition-colors duration-300">
@@ -66,7 +66,7 @@ title: Electricity Price Forecast SE3
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Model Type</p>
                     <p class="text-2xl font-bold text-white mt-1">XGBoost Regressor</p>
                 </div>
-                <div class="text-3xl opacity-50">🤖</div>
+                <div class="text-3xl opacity-50"></div>
             </div>
         </div>
 
@@ -97,7 +97,7 @@ title: Electricity Price Forecast SE3
 
                 <div class="dark-card">
                      <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white">📈 Price Trend & Performance</h2>
+                        <h2 class="text-xl font-bold text-white"> Price Trend & Performance</h2>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600">
@@ -111,7 +111,7 @@ title: Electricity Price Forecast SE3
 
                 <div class="dark-card">
                     <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white">🔍 Key Drivers (Feature Importance)</h2>
+                        <h2 class="text-xl font-bold text-white"> Key Drivers (Feature Importance)</h2>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600 w-full mb-4">

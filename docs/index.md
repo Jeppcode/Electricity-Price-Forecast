@@ -28,7 +28,7 @@ title: Electricity Price Forecast SE3
     <header class="border-b border-slate-800 bg-slate-950/50 py-12 mb-10 shadow-2xl">
         <div class="max-w-7xl mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white">
-                ⚡ Electricity Price <span class="accent-text">Forecast</span>
+                 Electricity Price <span class="accent-text">Forecast</span>
             </h1>
             <p class="text-slate-400 text-xl max-w-2xl mx-auto">
                 AI-powered predictions for the Stockholm Region (SE3).
@@ -77,7 +77,7 @@ title: Electricity Price Forecast SE3
                 <div class="dark-card">
                     <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
                         <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            🔌 Smart Charging Guide
+                             Smart Charging Guide
                         </h2>
                         <span class="bg-emerald-900/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full">
                             Actionable Insight

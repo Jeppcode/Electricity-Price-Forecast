@@ -39,14 +39,23 @@ title: Electricity Price Forecast SE3
 
     <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
+        <!--
+          1) VALUE + CONTEXT
+          2) DECISIONS (cheapest/expensive hours + best window + savings)
+          3) TOMORROW HOURLY PREDICTIONS (main plot)
+          4) RELIABILITY (predicted vs actual)
+          5) EXPLANATION (feature importance)
+          6) ABOUT (sources + pipelines + stack)
+        -->
+
         <div class="dark-card p-6 mb-10 border border-slate-700">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <p class="text-sm text-slate-300 font-bold uppercase tracking-wider">Next-day forecast</p>
-                    <h2 class="text-2xl font-bold text-white mt-1">Plan before the official price release</h2>
+                    <h2 class="text-2xl font-bold text-white mt-1">Tomorrow’s electricity price predictions (early access)</h2>
                     <p class="text-slate-400 text-sm mt-2">
-                        Official day-ahead prices are typically published around <strong>13:00</strong>. This dashboard provides an earlier forecast so you can plan flexible consumption (EV charging, laundry, dishwasher) in the morning.
-                        Once official prices are published, use them as the source of truth.
+                        Official day-ahead prices are typically published around <strong>13:00</strong>. This dashboard provides an earlier forecast so you can plan flexible consumption (EV charging, laundry, dishwasher) before the official release.
+                        After 13:00, use official prices as the source of truth.
                     </p>
                 </div>
                 <div class="text-sm text-slate-400">
@@ -67,10 +76,10 @@ title: Electricity Price Forecast SE3
                     <p class="text-slate-400 text-sm mt-2">Try to avoid flexible consumption in these windows.</p>
                 </div>
                 <div class="rounded-xl border border-slate-700 bg-white/5 p-5">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Best 4-hour window</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Cheapest 4-hour window (charging)</p>
                     <div id="bestWindow" class="mt-2 text-white font-semibold">—</div>
                     <p class="text-slate-400 text-sm mt-2">
-                        The lowest-average price across any <strong>4 consecutive hours</strong> tomorrow.
+                        The lowest average price across <strong>4 consecutive hours</strong> tomorrow.
                     </p>
                     <div class="mt-3 flex items-center gap-3">
                         <label for="kwh" class="text-slate-400 text-sm whitespace-nowrap">Flexible load (kWh)</label>
@@ -81,69 +90,74 @@ title: Electricity Price Forecast SE3
                         Estimated savings: <span id="savings" class="text-emerald-300 font-semibold">—</span>
                     </p>
                     <p class="text-slate-500 text-xs mt-1">
-                        Savings is a simple estimate: moving the selected kWh from the most expensive predicted hour to the cheapest predicted hour.
+                        The slider only affects the savings estimate (it scales with how many kWh you can shift).
                     </p>
                 </div>
             </div>
         </div>
 
         <div class="space-y-8">
-                
+
+                <!-- TOMORROW HOURLY PREDICTIONS -->
                 <div class="dark-card">
                     <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white">
-                             Smart Charging Guide
-                        </h2>
+                        <h2 class="text-xl font-bold text-white">Tomorrow: hourly predictions</h2>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600">
-                            <img src="PricesDashboard/assets/img/electricity_price_signal.png" class="w-full h-auto" alt="Charging Signal">
+                            <img src="PricesDashboard/assets/img/electricity_price_signal.png" class="w-full h-auto" alt="Tomorrow hourly predictions">
                         </div>
-                        <div class="mt-4 p-4 rounded-lg bg-emerald-900/20 border border-emerald-500/20">
-                            <p class="text-emerald-200 text-sm">
-                                <strong>Tip:</strong> Plan your high-energy activities (EV charging, laundry) during the <span class="text-emerald-400 font-bold">Green bars</span>. These are hours when the price is predicted to be lower than the daily average.
+                        <div class="mt-4 p-4 rounded-lg bg-slate-900/30 border border-slate-600/50">
+                            <p class="text-slate-200 text-sm leading-relaxed">
+                                <strong>How to use:</strong> Use the green/amber/red bars as a quick guide for flexible consumption.
+                                Combine this with the “Cheapest hours” and “Cheapest 4-hour window” cards above for an actionable plan.
                             </p>
                         </div>
                     </div>
                 </div>
 
+                <!-- RELIABILITY -->
                 <div class="dark-card">
                      <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white"> Price Trend & Performance</h2>
+                        <h2 class="text-xl font-bold text-white">Model reliability (recent history)</h2>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600">
                             <img src="PricesDashboard/assets/img/price_trend.png" class="w-full h-auto" alt="Price Trend">
                         </div>
-                        <p class="mt-3 text-slate-400 text-sm">
-                            This graph compares the <strong>Actual Price (Black)</strong> vs our <strong>Model's Prediction (Blue dashed)</strong> for the past days, followed by the future forecast.
-                        </p>
+                        <div class="mt-4 p-4 rounded-lg bg-slate-900/30 border border-slate-600/50">
+                            <p class="text-slate-200 text-sm leading-relaxed">
+                                <strong>How to read:</strong> <strong>Black</strong> is the actual price, <strong>orange dashed</strong> is the model prediction over recent days.
+                                This helps validate that the model tracks price dynamics before using it for planning.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- EXPLANATION -->
                 <div class="dark-card">
                     <div class="p-6 border-b border-slate-700 bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white"> Key Drivers (Feature Importance)</h2>
+                        <h2 class="text-xl font-bold text-white">What drives the prediction?</h2>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600 w-full mb-4">
                             <img src="PricesDashboard/assets/img/feature_importance.png" class="w-full h-auto object-cover" alt="Feature Importance">
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-400">
-                            <p>
-                                <strong>Understanding the graph:</strong> This chart shows which factors (features) the AI model finds most important when setting the price.
-                            </p>
-                            <p>
-                                <em>"Lags" (e.g., price_lag_24) represent past prices, indicating that electricity prices often repeat patterns from exactly 24 or 48 hours ago.</em>
+                        <div class="mt-2 p-4 rounded-lg bg-slate-900/30 border border-slate-600/50">
+                            <p class="text-slate-200 text-sm leading-relaxed">
+                                <strong>Understanding the graph:</strong> Higher bars mean the model relies more on that feature.
+                                <em>Lag</em> features (e.g. <code class="text-slate-100">price_lag_24</code>) capture that prices often repeat daily patterns.
                             </p>
                         </div>
                     </div>
                 </div>
 
+                <!-- ABOUT -->
                 <div class="dark-card bg-gradient-to-br from-slate-800 to-slate-900 p-6 border-blue-500/30 border">
                     <h3 class="font-bold text-lg text-white mb-4">About the Project</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
-                        This is a serverless Machine Learning pipeline built with <strong>Hopsworks</strong> Feature Store & <strong>GitHub Actions</strong>.
+                        This project forecasts next-day hourly electricity prices for SE3 before the official day-ahead prices are published (~13:00).
+                        The goal is to support morning planning for flexible consumption (EV charging, laundry, dishwasher).
                     </p>
                     <div class="mb-6">
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Data sources (APIs)</p>
@@ -163,20 +177,19 @@ title: Electricity Price Forecast SE3
                             </li>
                         </ul>
                         <p class="text-slate-500 text-xs mt-3">
-                            Official day-ahead prices are typically published around 13:00; this dashboard provides an earlier forecast for planning.
+                            Note: after 13:00, official prices should be used as the source of truth.
                         </p>
                     </div>
-                    <ul class="space-y-2 mb-6 text-sm text-slate-400">
-                        <li class="flex items-center gap-2">
-                            <span class="text-blue-500">✓</span> Daily Data Fetching
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-blue-500">✓</span> XGBoost Training
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-blue-500">✓</span> Automated Inference
-                        </li>
-                    </ul>
+                    <div class="mb-6">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Pipelines</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Daily ingestion updates the feature store, daily inference generates predictions and dashboard assets, and monthly training retrains the model.
+                        </p>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mt-4 mb-2">Technology</p>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Python, XGBoost, Hopsworks Feature Store & Model Registry, GitHub Actions, GitHub Pages.
+                        </p>
+                    </div>
                     <a href="https://github.com/Jeppcode/Project" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg shadow-blue-500/20">
                         View Code on GitHub
                     </a>
@@ -217,9 +230,13 @@ title: Electricity Price Forecast SE3
   function computeSavings(summary, kwh) {
     const prices = (summary.predicted_prices || []).map((p) => Number(p.price));
     if (prices.length === 0) return null;
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    return (max - min) * kwh;
+    const peak = Math.max(...prices);
+    const bestAvg =
+      summary.best_window_hours && summary.best_window_hours.avg_price != null
+        ? Number(summary.best_window_hours.avg_price)
+        : Math.min(...prices);
+    const delta = Math.max(0, peak - bestAvg);
+    return delta * kwh;
   }
 
   async function loadSummary() {
@@ -249,7 +266,7 @@ title: Electricity Price Forecast SE3
         const kwh = Number(kwhEl.value);
         kwhValEl.textContent = String(kwh);
         const s = computeSavings(summary, kwh);
-        savingsEl.textContent = s == null ? "—" : `${s.toFixed(0)} SEK (peak → cheapest hour)`;
+        savingsEl.textContent = s == null ? "—" : `${s.toFixed(0)} SEK (peak → best 4h avg)`;
       };
 
       if (kwhEl) {

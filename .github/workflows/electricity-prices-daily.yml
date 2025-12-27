@@ -8,7 +8,7 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-    # VIKTIGT: Detta ger tillåtelse att spara bilden
+    # Required for committing updated dashboard images back to the repo.
     permissions:
       contents: write
       
@@ -29,8 +29,7 @@ jobs:
           pip install -r requirements.txt
           pip install papermill
 
-      # Du kan avkommentera Notebook 2 om du vill köra den också, 
-      # men just nu fokuserar vi på Notebook 4 för dashboarden.
+      # Daily feature ingestion.
       - name: Run notebook 2
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
@@ -39,19 +38,19 @@ jobs:
       - name: Run notebook 4 (batch inference)
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-        # Vi kör papermill för att generera graferna
+        # Generates dashboard plots under docs/PricesDashboard/assets/img/.
         run: python -m papermill NotebooksElectricity/4_electricity_prices_batch_inference.ipynb /tmp/out4_daily.ipynb
 
-      # --- HÄR ÄR STEGET SOM SAKNADES ---
+      # Commit updated plots (if any) so GitHub Pages/dashboard stays current.
       - name: Commit and Push new plots
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          # Lägg till de nya bilderna
+          # Add updated images.
           git add docs/PricesDashboard/assets/img/*.png
           
-          # Commita och pusha (om det finns ändringar)
+          # Commit and push if there are changes.
           git commit -m "Update dashboard plots" || echo "No changes to commit"
           git push
 

@@ -161,8 +161,10 @@ def get_hourly_historical_weather(
     
     # Add metadata columns
     df['city'] = city
-    df['date'] = df['timestamp'].dt.date
-    df['hour'] = df['timestamp'].dt.hour
+    # Define date/hour in Europe/Stockholm to keep calendar-day filters stable.
+    local_ts = df['timestamp'].dt.tz_convert("Europe/Stockholm")
+    df['date'] = local_ts.dt.date
+    df['hour'] = local_ts.dt.hour
     
     # Convert to float32 for efficiency
     numeric_cols = [c for c in df.columns if c not in ['timestamp', 'city', 'date', 'hour']]
@@ -239,8 +241,10 @@ def get_hourly_weather_forecast(
     
     # Add metadata columns
     df['city'] = city
-    df['date'] = df['timestamp'].dt.date
-    df['hour'] = df['timestamp'].dt.hour
+    # Define date/hour in Europe/Stockholm to keep calendar-day filters stable.
+    local_ts = df['timestamp'].dt.tz_convert("Europe/Stockholm")
+    df['date'] = local_ts.dt.date
+    df['hour'] = local_ts.dt.hour
     
     # Convert to float32 for efficiency
     numeric_cols = [c for c in df.columns if c not in ['timestamp', 'city', 'date', 'hour']]
@@ -331,15 +335,15 @@ def get_yesterday_hourly_weather(
     city: str = "Stockholm"
 ) -> pd.DataFrame:
     """
-    Convenience helper: hämta gårdagens timvisa väder för givna koordinater.
+    Convenience helper to fetch yesterday's hourly weather for a location.
     
     Args:
-        latitude: Latitud
-        longitude: Longitud
-        city: Stadens namn (endast metadata)
+        latitude: Location latitude
+        longitude: Location longitude
+        city: City name (metadata)
     
     Returns:
-        DataFrame med timvisa vädervärden för gårdagen.
+        DataFrame with hourly weather records for yesterday.
     """
     yesterday = date.today() - timedelta(days=1)
     iso_date = yesterday.isoformat()
@@ -352,7 +356,7 @@ def get_yesterday_hourly_weather(
         city=city,
     )
     
-    # Säkerställ att endast gårdagens data returneras om API:t ger marginalt spann
+    # Guard against API boundary effects (e.g., extra hours around the requested day).
     df = df[df["date"] == yesterday]
     return df
 
@@ -559,11 +563,33 @@ def fetch_electricity_prices(
         # For legacy proxy data we only have time_start and hourly values
         df['time_end'] = df['timestamp'] + pd.Timedelta(hours=1)
     
+    # Some sources can return 15-min granularity (96 rows/day). Coerce to hourly
+    # so feature store keys align with weather_hourly (hourly).
+    coerced_to_hourly = False
+    df['_ts_hour'] = df['timestamp'].dt.floor('h')
+    if df['_ts_hour'].duplicated().any():
+        # Normalize column names early if needed so aggregation is straightforward
+        df = df.rename(columns={
+            'SEK_per_kWh': 'price_sek',
+            'EUR_per_kWh': 'price_eur',
+            'EXR': 'exchange_rate'
+        })
+        agg_cols = {c: 'mean' for c in ['price_sek', 'price_eur', 'exchange_rate'] if c in df.columns}
+        df = df.groupby('_ts_hour', as_index=False).agg(agg_cols).rename(columns={'_ts_hour': 'timestamp'})
+        df['time_end'] = df['timestamp'] + pd.Timedelta(hours=1)
+        print("Coerced electricity prices to hourly resolution (aggregated sub-hour data).")
+        coerced_to_hourly = True
+        # The per-day API record counts are expected to deviate (e.g., 96 instead of 24).
+        # Downstream output is hourly after the aggregation above.
+        bad_length_dates = []
+    else:
+        df = df.drop(columns=['_ts_hour'])
+
     # Extract time features
     df['date'] = pd.to_datetime(df['timestamp'].dt.date)
     df['hour'] = df['timestamp'].dt.hour.astype('int16')
     
-    # Rename and select columns
+    # Rename and select columns (safe if already renamed above)
     df = df.rename(columns={
         'SEK_per_kWh': 'price_sek',
         'EUR_per_kWh': 'price_eur',

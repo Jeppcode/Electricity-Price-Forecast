@@ -39,6 +39,47 @@ title: Electricity Price Forecast SE3
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+        <div class="dark-card p-6 mb-10 border border-slate-700">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Next-day forecast</p>
+                    <h2 class="text-2xl font-bold text-white mt-1">Plan before the official price release</h2>
+                    <p class="text-slate-400 text-sm mt-2">
+                        Official day-ahead prices are typically published around <strong>13:00</strong>. This dashboard provides an earlier forecast.
+                    </p>
+                </div>
+                <div class="text-sm text-slate-400">
+                    <div>Forecast date: <span id="forecastDate" class="text-white font-semibold">—</span></div>
+                    <div>Updated (UTC): <span id="forecastUpdated" class="text-white font-semibold">—</span></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div class="rounded-xl border border-slate-700 bg-white/5 p-5">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Cheapest hours</p>
+                    <div id="cheapestHours" class="mt-2 text-white font-semibold">—</div>
+                    <p class="text-slate-400 text-sm mt-2">Good time for EV charging, laundry, dishwasher.</p>
+                </div>
+                <div class="rounded-xl border border-slate-700 bg-white/5 p-5">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Most expensive hours</p>
+                    <div id="expensiveHours" class="mt-2 text-white font-semibold">—</div>
+                    <p class="text-slate-400 text-sm mt-2">Try to avoid flexible consumption in these windows.</p>
+                </div>
+                <div class="rounded-xl border border-slate-700 bg-white/5 p-5">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Best 4-hour window</p>
+                    <div id="bestWindow" class="mt-2 text-white font-semibold">—</div>
+                    <div class="mt-3 flex items-center gap-3">
+                        <label for="kwh" class="text-slate-400 text-sm whitespace-nowrap">Flexible load (kWh)</label>
+                        <input id="kwh" type="range" min="2" max="40" value="10" class="w-full">
+                        <div class="text-white font-semibold w-14 text-right"><span id="kwhVal">10</span></div>
+                    </div>
+                    <p class="text-slate-400 text-sm mt-2">
+                        Estimated savings: <span id="savings" class="text-emerald-300 font-semibold">—</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="dark-card p-6 flex items-center justify-between hover:border-blue-500 transition-colors duration-300">
                 <div>
@@ -162,3 +203,82 @@ title: Electricity Price Forecast SE3
 
     </main>
 </div>
+
+<script>
+  const SUMMARY_URL = "PricesDashboard/assets/data/forecast_summary.json";
+
+  const fmtHour = (h) => String(h).padStart(2, "0") + ":00";
+  const fmtHourRange = (start, end) => `${fmtHour(start)}–${fmtHour(end)}`;
+
+  function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  function setHtml(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+
+  function formatHours(list) {
+    if (!Array.isArray(list) || list.length === 0) return "—";
+    const sorted = [...list].sort((a, b) => a.hour_local - b.hour_local);
+    return sorted
+      .map((x) => `${fmtHour(x.hour_local)} (${Number(x.price).toFixed(3)} SEK/kWh)`)
+      .join("<br/>");
+  }
+
+  function computeSavings(summary, kwh) {
+    const prices = (summary.predicted_prices || []).map((p) => Number(p.price));
+    if (prices.length === 0) return null;
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return (max - min) * kwh;
+  }
+
+  async function loadSummary() {
+    try {
+      const res = await fetch(SUMMARY_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const summary = await res.json();
+
+      setText("forecastDate", summary.date_local || "—");
+      setText("forecastUpdated", summary.generated_at_utc ? String(summary.generated_at_utc).replace("T", " ").slice(0, 19) : "—");
+
+      setHtml("cheapestHours", formatHours(summary.cheapest_hours));
+      setHtml("expensiveHours", formatHours(summary.most_expensive_hours));
+
+      if (summary.best_window_hours && summary.best_window_hours.start_hour != null) {
+        const bw = summary.best_window_hours;
+        setText("bestWindow", `${fmtHourRange(bw.start_hour, bw.end_hour)} (avg ${Number(bw.avg_price).toFixed(3)} SEK/kWh)`);
+      } else {
+        setText("bestWindow", "—");
+      }
+
+      const kwhEl = document.getElementById("kwh");
+      const kwhValEl = document.getElementById("kwhVal");
+      const savingsEl = document.getElementById("savings");
+
+      const updateSavings = () => {
+        const kwh = Number(kwhEl.value);
+        kwhValEl.textContent = String(kwh);
+        const s = computeSavings(summary, kwh);
+        savingsEl.textContent = s == null ? "—" : `${s.toFixed(0)} SEK (peak → cheapest hour)`;
+      };
+
+      if (kwhEl) {
+        kwhEl.addEventListener("input", updateSavings);
+        updateSavings();
+      }
+    } catch (e) {
+      setText("forecastDate", "—");
+      setText("forecastUpdated", "—");
+      setText("cheapestHours", "—");
+      setText("expensiveHours", "—");
+      setText("bestWindow", "—");
+      setText("savings", "—");
+    }
+  }
+
+  loadSummary();
+</script>

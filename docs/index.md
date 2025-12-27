@@ -26,7 +26,7 @@ title: Electricity Price Forecast SE3
 <div class="min-h-screen pb-12">
 
     <header class="border-b border-slate-800 bg-slate-950/50 py-12 mb-10 shadow-2xl">
-        <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="max-w-screen-2xl mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white">
                  Electricity Price <span class="accent-text">Forecast</span>
             </h1>
@@ -37,15 +37,16 @@ title: Electricity Price Forecast SE3
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="dark-card p-6 mb-10 border border-slate-700">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Next-day forecast</p>
+                    <p class="text-sm text-slate-300 font-bold uppercase tracking-wider">Next-day forecast</p>
                     <h2 class="text-2xl font-bold text-white mt-1">Plan before the official price release</h2>
                     <p class="text-slate-400 text-sm mt-2">
-                        Official day-ahead prices are typically published around <strong>13:00</strong>. This dashboard provides an earlier forecast.
+                        Official day-ahead prices are typically published around <strong>13:00</strong>. This dashboard provides an earlier forecast so you can plan flexible consumption (EV charging, laundry, dishwasher) in the morning.
+                        Once official prices are published, use them as the source of truth.
                     </p>
                 </div>
                 <div class="text-sm text-slate-400">
@@ -68,6 +69,9 @@ title: Electricity Price Forecast SE3
                 <div class="rounded-xl border border-slate-700 bg-white/5 p-5">
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Best 4-hour window</p>
                     <div id="bestWindow" class="mt-2 text-white font-semibold">—</div>
+                    <p class="text-slate-400 text-sm mt-2">
+                        The lowest-average price across any <strong>4 consecutive hours</strong> tomorrow.
+                    </p>
                     <div class="mt-3 flex items-center gap-3">
                         <label for="kwh" class="text-slate-400 text-sm whitespace-nowrap">Flexible load (kWh)</label>
                         <input id="kwh" type="range" min="2" max="40" value="10" class="w-full">
@@ -76,53 +80,20 @@ title: Electricity Price Forecast SE3
                     <p class="text-slate-400 text-sm mt-2">
                         Estimated savings: <span id="savings" class="text-emerald-300 font-semibold">—</span>
                     </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="dark-card p-6 flex items-center justify-between hover:border-blue-500 transition-colors duration-300">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">System Status</p>
-                    <p class="text-2xl font-bold text-emerald-400 flex items-center gap-2 mt-1">
-                        <span class="relative flex h-3 w-3">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                        </span>
-                        Operational
+                    <p class="text-slate-500 text-xs mt-1">
+                        Savings is a simple estimate: moving the selected kWh from the most expensive predicted hour to the cheapest predicted hour.
                     </p>
                 </div>
             </div>
-            
-            <div class="dark-card p-6 flex items-center justify-between hover:border-blue-500 transition-colors duration-300">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Region</p>
-                    <p class="text-2xl font-bold text-white mt-1">SE3 Stockholm</p>
-                </div>
-                <div class="text-3xl opacity-50"></div>
-            </div>
-
-            <div class="dark-card p-6 flex items-center justify-between hover:border-blue-500 transition-colors duration-300">
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Model Type</p>
-                    <p class="text-2xl font-bold text-white mt-1">XGBoost Regressor</p>
-                </div>
-                <div class="text-3xl opacity-50"></div>
-            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-            <div class="lg:col-span-8 space-y-8">
+        <div class="space-y-8">
                 
                 <div class="dark-card">
-                    <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <div class="p-6 border-b border-slate-700 bg-slate-800/50">
+                        <h2 class="text-xl font-bold text-white">
                              Smart Charging Guide
                         </h2>
-                        <span class="bg-emerald-900/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full">
-                            Actionable Insight
-                        </span>
                     </div>
                     <div class="p-6 bg-white/5">
                         <div class="rounded-lg overflow-hidden border border-slate-600">
@@ -169,15 +140,32 @@ title: Electricity Price Forecast SE3
                     </div>
                 </div>
 
-            </div>
-
-            <div class="lg:col-span-4 space-y-8">
-                
-                <div class="dark-card bg-gradient-to-br from-slate-800 to-slate-900 p-6 border-blue-500/30 border sticky top-6">
+                <div class="dark-card bg-gradient-to-br from-slate-800 to-slate-900 p-6 border-blue-500/30 border">
                     <h3 class="font-bold text-lg text-white mb-4">About the Project</h3>
                     <p class="text-slate-400 text-sm mb-6 leading-relaxed">
                         This is a serverless Machine Learning pipeline built with <strong>Hopsworks</strong> Feature Store & <strong>GitHub Actions</strong>.
                     </p>
+                    <div class="mb-6">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Data sources (APIs)</p>
+                        <ul class="space-y-2 text-sm text-slate-400">
+                            <li>
+                                <strong class="text-slate-200">Electricity prices</strong>:
+                                day-ahead hourly prices for Sweden price areas (SE1–SE4) from
+                                <a class="underline decoration-slate-600 hover:decoration-slate-300" href="https://www.elprisetjustnu.se/">elprisetjustnu.se</a>
+                                (via the proxy API at
+                                <a class="underline decoration-slate-600 hover:decoration-slate-300" href="https://api.elpris.eu/">api.elpris.eu</a>
+                                when available).
+                            </li>
+                            <li>
+                                <strong class="text-slate-200">Weather</strong>:
+                                hourly forecast and historical weather from
+                                <a class="underline decoration-slate-600 hover:decoration-slate-300" href="https://open-meteo.com/">Open‑Meteo</a>.
+                            </li>
+                        </ul>
+                        <p class="text-slate-500 text-xs mt-3">
+                            Official day-ahead prices are typically published around 13:00; this dashboard provides an earlier forecast for planning.
+                        </p>
+                    </div>
                     <ul class="space-y-2 mb-6 text-sm text-slate-400">
                         <li class="flex items-center gap-2">
                             <span class="text-blue-500">✓</span> Daily Data Fetching
@@ -193,8 +181,6 @@ title: Electricity Price Forecast SE3
                         View Code on GitHub
                     </a>
                 </div>
-
-            </div>
         </div>
         
         <footer class="mt-16 text-center text-slate-500 text-sm pb-8">

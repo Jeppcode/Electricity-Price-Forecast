@@ -4,7 +4,7 @@ Course project for **KTH ID2223 Scalable Machine Learning**.
 
 ### 0) Project name and group members
 - **Project**: Electricity Prices — Early Next‑Day Forecast
-- **Group members**: _fill in names here_
+- **Group members**: Jesper Malmgren, Niklas Dahlbom
 
 ### 1) Dynamic data sources
 This project uses live/public APIs (no static Kaggle dataset):

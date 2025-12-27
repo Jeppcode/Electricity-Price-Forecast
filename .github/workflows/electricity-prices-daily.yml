@@ -1,70 +1,74 @@
-name: run-notebook-2
+name: Electricity Prices — Pipelines
 on:
   schedule:
-    - cron: "0 2 * * *"
-    - cron: "30 8 1 * *" # monthly for training
+    - cron: "0 2 * * *"        # daily: ingest + inference
+    - cron: "30 8 1 * *"       # monthly: retrain
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+env:
+  HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+  HOPSWORKS_HOST: ${{ secrets.HOPSWORKS_HOST }}
+  ELPRICE_BASE_URL: ${{ secrets.ELPRICE_BASE_URL }}
+  ELPRICE_AREA: ${{ secrets.ELPRICE_AREA }}
+
 jobs:
-  run:
+  daily-ingest:
+    name: Daily — Feature ingestion
     runs-on: ubuntu-latest
-    # Required for committing updated dashboard images back to the repo.
-    permissions:
-      contents: write
-      
-    env:
-      HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
-      HOPSWORKS_HOST: ${{ secrets.HOPSWORKS_HOST }}
-      ELPRICE_BASE_URL: ${{ secrets.ELPRICE_BASE_URL }}
-      ELPRICE_AREA: ${{ secrets.ELPRICE_AREA }}
-      
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          
+
       - run: |
           pip install -r requirements.txt
           pip install papermill
 
-      # Daily feature ingestion.
-      - name: Run notebook 2
+      - name: Run notebook 2 (feature pipeline)
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
         run: python -m papermill NotebooksElectricity/2_electricity_prices_feature_pipeline.ipynb /tmp/out.ipynb
 
+  daily-inference:
+    name: Daily — Batch inference + plots
+    needs: daily-ingest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: |
+          pip install -r requirements.txt
+          pip install papermill
+
       - name: Run notebook 4 (batch inference)
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-        # Generates dashboard plots under docs/PricesDashboard/assets/img/.
         run: python -m papermill NotebooksElectricity/4_electricity_prices_batch_inference.ipynb /tmp/out4_daily.ipynb
 
-      # Commit updated plots (if any) so GitHub Pages/dashboard stays current.
-      - name: Commit and Push new plots
+      - name: Commit updated plots
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          # Add updated images.
           git add docs/PricesDashboard/assets/img/*.png
           
-          # Commit and push if there are changes.
           git commit -m "Update dashboard plots" || echo "No changes to commit"
           git push
 
-  monthly-train-and-infer:
+  monthly-train:
+    name: Monthly — Retrain model
     if: github.event_name == 'schedule' && github.event.schedule == '30 8 1 * *'
-    needs: run
+    needs: daily-inference
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    env:
-      HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
-      HOPSWORKS_HOST: ${{ secrets.HOPSWORKS_HOST }}
-      ELPRICE_BASE_URL: ${{ secrets.ELPRICE_BASE_URL }}
-      ELPRICE_AREA: ${{ secrets.ELPRICE_AREA }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

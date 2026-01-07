@@ -1,133 +1,133 @@
 {
-  "generated_at_utc": "2026-01-06T03:49:54.786032+00:00",
+  "generated_at_utc": "2026-01-07T03:50:15.173515+00:00",
   "timezone": "Europe/Stockholm",
   "region": "SE3",
-  "date_local": "2026-01-07",
+  "date_local": "2026-01-08",
   "predicted_prices": [
     {
       "hour_local": 1,
-      "price": 0.8774445056915283
+      "price": 0.863835871219635
     },
     {
       "hour_local": 2,
-      "price": 0.8702857494354248
+      "price": 0.8359996676445007
     },
     {
       "hour_local": 3,
-      "price": 0.8757603764533997
+      "price": 0.8473643660545349
     },
     {
       "hour_local": 4,
-      "price": 0.8716623187065125
+      "price": 0.822399914264679
     },
     {
       "hour_local": 5,
-      "price": 0.9034850001335144
+      "price": 0.7731614112854004
     },
     {
       "hour_local": 6,
-      "price": 1.0254782438278198
+      "price": 0.7930803298950195
     },
     {
       "hour_local": 7,
-      "price": 1.3741809129714966
+      "price": 0.8022990822792053
     },
     {
       "hour_local": 8,
-      "price": 1.4905140399932861
+      "price": 0.9223374724388123
     },
     {
       "hour_local": 9,
-      "price": 1.551304578781128
+      "price": 0.9999528527259827
     },
     {
       "hour_local": 10,
-      "price": 1.5496792793273926
+      "price": 0.9962292313575745
     },
     {
       "hour_local": 11,
-      "price": 1.5592104196548462
+      "price": 0.9301939010620117
     },
     {
       "hour_local": 12,
-      "price": 1.5143606662750244
+      "price": 0.9046168327331543
     },
     {
       "hour_local": 13,
-      "price": 1.5248819589614868
+      "price": 0.8786313533782959
     },
     {
       "hour_local": 14,
-      "price": 1.507484793663025
+      "price": 0.9127014875411987
     },
     {
       "hour_local": 15,
-      "price": 1.4986540079116821
+      "price": 0.9168820977210999
     },
     {
       "hour_local": 16,
-      "price": 1.5247814655303955
+      "price": 1.052384614944458
     },
     {
       "hour_local": 17,
-      "price": 1.5311322212219238
+      "price": 1.1538527011871338
     },
     {
       "hour_local": 18,
-      "price": 1.4764224290847778
+      "price": 1.2483631372451782
     },
     {
       "hour_local": 19,
-      "price": 1.4899672269821167
+      "price": 1.3908747434616089
     },
     {
       "hour_local": 20,
-      "price": 1.4110791683197021
+      "price": 1.493986964225769
     },
     {
       "hour_local": 21,
-      "price": 1.3973652124404907
+      "price": 1.3669641017913818
     },
     {
       "hour_local": 22,
-      "price": 1.2243818044662476
+      "price": 1.284719467163086
     },
     {
       "hour_local": 23,
-      "price": 1.152618169784546
+      "price": 1.0398904085159302
     }
   ],
   "cheapest_hours": [
     {
-      "hour_local": 2,
-      "price": 0.8702857494354248
+      "hour_local": 5,
+      "price": 0.7731614112854004
     },
     {
-      "hour_local": 4,
-      "price": 0.8716623187065125
+      "hour_local": 6,
+      "price": 0.7930803298950195
     },
     {
-      "hour_local": 3,
-      "price": 0.8757603764533997
+      "hour_local": 7,
+      "price": 0.8022990822792053
     }
   ],
   "most_expensive_hours": [
     {
-      "hour_local": 11,
-      "price": 1.5592104196548462
+      "hour_local": 20,
+      "price": 1.493986964225769
     },
     {
-      "hour_local": 9,
-      "price": 1.551304578781128
+      "hour_local": 19,
+      "price": 1.3908747434616089
     },
     {
-      "hour_local": 10,
-      "price": 1.5496792793273926
+      "hour_local": 21,
+      "price": 1.3669641017913818
     }
   ],
   "best_window_hours": {
-    "start_hour": 1,
-    "end_hour": 4,
-    "avg_price": 0.8737882375717163
+    "start_hour": 4,
+    "end_hour": 7,
+    "avg_price": 0.797735184431076
   }
 }

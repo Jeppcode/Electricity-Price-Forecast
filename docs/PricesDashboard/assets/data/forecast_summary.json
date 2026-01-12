@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-01-12T04:01:16.119422+00:00",
+  "generated_at_utc": "2026-01-12T06:09:21.942714+00:00",
   "timezone": "Europe/Stockholm",
   "region": "SE3",
   "date_local": "2026-01-13",
@@ -26,11 +26,11 @@
     },
     {
       "hour_local": 6,
-      "price": 1.122880220413208
+      "price": 1.1135817766189575
     },
     {
       "hour_local": 7,
-      "price": 1.197028398513794
+      "price": 1.2257896661758423
     },
     {
       "hour_local": 8,
@@ -78,7 +78,7 @@
     },
     {
       "hour_local": 19,
-      "price": 1.341773271560669
+      "price": 1.346958041191101
     },
     {
       "hour_local": 20,
@@ -121,8 +121,8 @@
       "price": 1.3573561906814575
     },
     {
-      "hour_local": 17,
-      "price": 1.3443421125411987
+      "hour_local": 19,
+      "price": 1.346958041191101
     }
   ],
   "best_window_hours": {

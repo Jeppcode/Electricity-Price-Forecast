@@ -550,18 +550,62 @@ def fetch_electricity_prices(
         print(f"Warning: missing price data for {len(missing_dates)} day(s). First missing: {preview}")
     
     # Parse timestamps
-    if 'time_start' in df.columns:
-        df['timestamp'] = pd.to_datetime(df['time_start'], utc=True)
-    elif 'timestamp' in df.columns:
-        df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
+    # The price APIs usually include timezone offsets, but some mirrors can return
+    # naive timestamps. Naive timestamps must be interpreted as Europe/Stockholm
+    # (Nordpool local time) to avoid systematic 1h shifts around midnight.
+    def _parse_price_ts_to_utc(s: pd.Series) -> pd.Series:
+        # Convert to string to robustly detect timezone offsets.
+        s_str = s.astype("string")
+
+        # Heuristic: treat values containing an explicit offset (e.g. +01:00) or Z as tz-aware.
+        # Mixed offsets across DST are common; parsing tz-aware values with utc=True normalizes safely.
+        # NOTE: regex must use \d (digit). Do NOT double-escape, otherwise it becomes a literal "\d".
+        has_tz = s_str.str.contains(r"(Z|[+-]\d{2}:\d{2})", regex=True, na=False)
+
+        out = pd.Series(pd.NaT, index=s.index, dtype="datetime64[ns, UTC]")
+
+        # Parse tz-aware values straight to UTC (handles mixed +01/+02 across years).
+        if has_tz.any():
+            aware = pd.to_datetime(s_str[has_tz], errors="coerce", utc=True)
+            out.loc[has_tz] = aware
+
+        # Parse naive values as Europe/Stockholm local time, then convert to UTC.
+        if (~has_tz).any():
+            naive = pd.to_datetime(s_str[~has_tz], errors="coerce", utc=False)
+            if not pd.api.types.is_datetime64_any_dtype(naive):
+                sample = s_str.dropna().head(5).tolist()
+                raise ValueError(
+                    "Could not parse naive price timestamps into datetimes. "
+                    f"dtype={getattr(naive, 'dtype', type(naive))}, sample={sample}"
+                )
+            naive_utc = (
+                naive.dt.tz_localize("Europe/Stockholm", ambiguous="infer", nonexistent="shift_forward")
+                .dt.tz_convert("UTC")
+            )
+            out.loc[~has_tz] = naive_utc
+
+        # Final guard: if everything is NaT, error with sample for diagnosis.
+        if out.notna().sum() == 0:
+            sample = s_str.dropna().head(10).tolist()
+            raise ValueError(
+                "Could not parse any price timestamps into UTC datetimes. "
+                f"sample={sample}"
+            )
+
+        return out
+
+    if "time_start" in df.columns:
+        df["timestamp"] = _parse_price_ts_to_utc(df["time_start"])
+    elif "timestamp" in df.columns:
+        df["timestamp"] = _parse_price_ts_to_utc(df["timestamp"])
     else:
         raise ValueError("Price response missing time_start/timestamp fields")
 
-    if 'time_end' in df.columns:
-        df['time_end'] = pd.to_datetime(df['time_end'], utc=True)
+    if "time_end" in df.columns:
+        df["time_end"] = _parse_price_ts_to_utc(df["time_end"])
     else:
         # For legacy proxy data we only have time_start and hourly values
-        df['time_end'] = df['timestamp'] + pd.Timedelta(hours=1)
+        df["time_end"] = df["timestamp"] + pd.Timedelta(hours=1)
     
     # Some sources can return 15-min granularity (96 rows/day). Coerce to hourly
     # so feature store keys align with weather_hourly (hourly).
@@ -585,9 +629,10 @@ def fetch_electricity_prices(
     else:
         df = df.drop(columns=['_ts_hour'])
 
-    # Extract time features
-    df['date'] = pd.to_datetime(df['timestamp'].dt.date)
-    df['hour'] = df['timestamp'].dt.hour.astype('int16')
+    # Extract time features in Europe/Stockholm (stable local calendar + matches weather.hour)
+    local_ts = df["timestamp"].dt.tz_convert("Europe/Stockholm")
+    df["date"] = pd.to_datetime(local_ts.dt.date)
+    df["hour"] = local_ts.dt.hour.astype("int16")
     
     # Rename and select columns (safe if already renamed above)
     df = df.rename(columns={
